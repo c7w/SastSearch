@@ -19,3 +19,5 @@ The content page of the search engine.
 `GET` ?id=<id>&highlight=[highlight: none]
 
 *By c7w*
+
+
