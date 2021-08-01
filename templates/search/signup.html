@@ -8,7 +8,9 @@
             <p class="profile-name-card"> </p>
             <!-- TODO: POST表单 -->
             <form class="form-signin" action="#" method="post">
+                {% if message %}   
                 <div class="alert alert-warning" style="font-size: 50%">{{ message | safe }}</div>
+                {%endif%}
                 <span class="reauth-email"> </span>
                 <input class="form-control" type="email" id="inputEmail" required="" placeholder="Email address" autofocus="" name="email">
                 <input class="form-control" type="password" id="inputPassword" required="" placeholder="Password" name="password">

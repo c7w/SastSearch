@@ -5,9 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <!-- TODO: 修改网站名称和描述 -->
-        <title> Title </title>
-        <meta name="description" content="description">
+        <title> {{title}} </title>
+        <meta name="description" content="{{title}}">
 
         <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.14.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
@@ -24,13 +23,13 @@
 
         <span class="navbar-text actions">
             <!-- TODO: 如果用户已经登录，则展示log out和头像，否则展示log in和sign up-->
+            {%if login.success == '1'%}
             <a class="login" href="/logout">Log Out</a>
-            <!-- TODO: load static -->
-            <a href="#"><img class="user-avatar" src=""></a>
-
+            <a href="#"><img class="user-avatar" src="{{login.avatar}}"></a>
+            {%else%}
             <a class="login" href="/login">Log In</a>
             <a class="btn btn-light action-button" role="button" href="/signup">Sign Up</a>
-
+            {%endif%}
         </span>
         </div>
     </nav>
