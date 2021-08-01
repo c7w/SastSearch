@@ -134,3 +134,7 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_DIRS = (os.path.join('static'), )
+
+EMAIL_HOST = 'smtp.ym.163.com'
+EMAIL_HOST_USER = 'SAST_SearchEngine@cc7w.cf'
+EMAIL_HOST_PASSWORD = '123456'

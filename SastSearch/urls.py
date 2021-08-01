@@ -23,4 +23,5 @@ urlpatterns = [
     path('news/', views.news),
     path('signup/', views.signup),
     path('signup/<code>/', views.signup_verify),
+    path('login/', views.login),
 ]

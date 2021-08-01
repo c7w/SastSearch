@@ -1,0 +1,12 @@
+<!-- 注册表单 -->
+{% extends 'base.html' %}
+{% load static %}
+{% block main_block %}
+    <main>
+        <div class="login-card bg-light" style="border-radius: 10px">
+            <img class="profile-img-card" src="{% static 'img/avatar_2x.png' %}">
+            <p class="profile-name-card"> </p>
+            <div class="alert alert-warning" style="font-size: 50%">{{ message | safe }}</div>
+            <a class="forgot-password" href="/login">Already have a account?</a></div>
+    </main>
+{% endblock main_block %}
