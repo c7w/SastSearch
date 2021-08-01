@@ -8,7 +8,8 @@ body::before {
     position: fixed;
     pointer-events: none;
     background-repeat: no-repeat;
-    background-image: url(https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN)
+    background-image: url(https://z3.ax1x.com/2021/08/01/Wxs2V0.jpg);
+    background-size: 100% 100%;
 }
 
 .login-card {
@@ -175,9 +176,9 @@ p.post-abstract {
     margin-right: 1%
 }
 
-@media only screen and (max-height:600px).post-abstract {
+/* @media only screen and (max-height:600px).post-abstract {
     font-size: 16px
-}
+} */
 
 * {
     box-sizing: border-box
@@ -1205,5 +1206,4 @@ div {
         -webkit-transform: translate(0) rotate(0);
         transform: translate(0) rotate(0)
     }
-}
 }

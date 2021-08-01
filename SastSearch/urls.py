@@ -22,4 +22,5 @@ urlpatterns = [
     path('', views.index),
     path('news/', views.news),
     path('signup/', views.signup),
+    path('signup/<code>/', views.signup_verify),
 ]
