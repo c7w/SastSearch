@@ -251,12 +251,12 @@ p.post-short-info {
     margin-bottom: 0
 }
 
-@media(min-width:768px) {
+/* @media(min-width:768px) {
     .navigation-clean-button {
         padding-top: 1rem;
         padding-bottom: 1rem
     }
-}
+} */
 
 .navigation-clean-button .navbar-brand {
     font-weight: bold;
@@ -586,6 +586,7 @@ main {
     min-height: 100%;
     margin: 0;
     position: relative;
+    /* top: 15%; */
     display: flex;
     writing-mode: horizontal-tb;
     padding-bottom: 60px
@@ -604,7 +605,7 @@ div {
 }
 
 .post-title a {
-    font-size: 30px
+    font-size: 20px
 }
 
 .post-container {

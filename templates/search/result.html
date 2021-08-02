@@ -4,22 +4,28 @@
 <main>
     <div class="container">
         <!-- TODO: -->
-        <p>Find ? results in ? s, currently at page ? / ?.<br></p>
+        <p>Find {{search.resultCount}} results in {{search.timeCost}} s, currently at page {{search.currPage}} / {{search.totalPage}}.<br></p>
 
         <!-- TODO: 展示每个搜索结果-->
+        {%for entry in search.currEntry%}
         <div class="post-container">
             <div class="post-content">
-                <h1 class="post-title"><a href="#"> TITLE </a></h1>
+                <h3 class="post-title">{{entry.title|safe}}</h3>
                 <p class="post-abstract">
-                    ARTICLE ABSTRACT
+                    {{entry.excerpt|safe}}
                 </p>
             </div>
         </div>
+        {%endfor%}
 
         <p style="text-align: center">
-            <a href="#">上一页</a>
-            <span>第 ? 页 | 共 ? 页</span>
-            <a href="#">下一页</a>
+            {% if search.currPage > 1 %}
+            <a href="{{search.lastPage}}">上一页</a>
+            {%endif%}
+            <span>第 {{search.currPage}} 页 | 共 {{search.totalPage}} 页</span>
+            {% if search.currPage < search.totalPage %}
+            <a href="{{search.nextPage}}">下一页</a>
+            {%endif%}
         </p>
     </div>
 </main>

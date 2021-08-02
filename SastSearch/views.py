@@ -1,4 +1,4 @@
-from datetime import datetime
+import time, math
 from django.http.response import Http404, HttpResponse, HttpResponseNotFound
 from SearchEngine.models.RegVerify import RegVerify, PassReset
 from SearchEngine.models.Search import SearchRecord, News
@@ -7,6 +7,7 @@ import django.contrib.auth.models as AuthModels
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from utils import DataManager, GeneralProperty, MailVerify
+from django.db.models import Q
 
 # Create your views here.
 def index(req):
@@ -39,7 +40,7 @@ def signup(req):
     if req.method == "GET":
         return render(req, "search/signup.html", props)
     if req.method == "POST":
-        # Retrive data
+        # Retrieve data
         email = req.POST['email']
         password = req.POST['password']
         password_repeat = req.POST['password_repeat']
@@ -86,7 +87,7 @@ def login(req):
     if req.method == "GET":
         return render(req, "search/login.html", props)
     if req.method == "POST":
-        # Retrive data
+        # Retrieve data
         email = req.POST['email']
         password = req.POST['password']
         
@@ -149,7 +150,7 @@ def reset_password_verify(req, code):
             props['message'] = "The link was invalid or expired."
             return render(req, "search/reset_password.html", props)
     if req.method == "POST":
-        # Retrive data
+        # Retrieve data
         email = PassReset.objects.get(code=code).email
         password = req.POST['password']
         password_repeat = req.POST['password_repeat']
@@ -171,4 +172,46 @@ def process_data(req):
 
 def search(req):
     props = GeneralProperty.getProps(req, "Result")
-    return render(req, "search/result.html", props)
+    if props['login']['success'] == '0':
+        return redirect("/login")
+    query = req.GET.get("q")
+    fuzzy = req.GET.get("fuzzy", "disabled")
+    page = int(req.GET.get("page", "1"))
+    
+    if fuzzy != 'disabled':
+        pass
+    else:
+        START_SEARCH = time.time()
+        q1 = News.objects.filter(Q(title__contains=query) | Q(content__contains=query))
+        result = []
+        for article in q1:
+            # Retrieve Data and Calculate Weight
+            title_weight = article.title.count(query) * 10
+            content_weight = article.content.count(query)
+            result.append({"article": article.id, "weight": (title_weight + content_weight)})
+        result.sort(key=lambda s: s['weight'], reverse=True)
+        
+        props['search'] = {
+            'resultCount': len(result),
+            'currPage': page,
+            'totalPage': math.ceil(len(result)/10),
+            'lastPage': "/search?q=%s&fuzzy=%s&page=%s" % (query, fuzzy, page-1),
+            'nextPage': "/search?q=%s&fuzzy=%s&page=%s" % (query, fuzzy, page+1),
+            'currEntry': []
+        }
+        for entry in result[(page-1)*10 : page*10]:
+            article_title = News.objects.get(id=entry['article'])
+            title = ("<a href='%s'>%s</a>" % ("/news?id="+str(entry['article'])+"&highlight="+query, \
+                article_title.title.replace(query, "<span style='background-color: yellow'>%s</span>" % query)))
+            # TODO
+            excerpt = "Abstract Placeholder"
+            
+            currObject = {
+                "title": title,
+                "excerpt": excerpt
+            }
+            props['search']['currEntry'].append(currObject)
+        
+        END_SEARCH = time.time()
+        props['search']['timeCost'] = round(END_SEARCH - START_SEARCH, 6)
+        return render(req, "search/result.html", props)
