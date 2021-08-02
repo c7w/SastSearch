@@ -53,11 +53,15 @@ c7w
     send_mail("Password Reset | No Reply", message, 'SAST_SearchEngine@cc7w.cf', [email])
 
 def verifyCode(code):
+    # Init the permission
+    # AuthModels.Permission.objects.create(
+    #     name='EmailVerified', codename='EmailVerified', content_type=ContentType.objects.get(app_label='auth', model='user'))
+    
     try:
         record = RegVerify.RegVerify.objects.get(code=code)
         permission = AuthModels.Permission.objects.get(codename='EmailVerified')
         AuthModels.User.objects.get(username=record.email).user_permissions.add(permission)
-        RegVerify.RegVerify.objects.delete(code=code)
+        record.delete()
         return True
     except:
         return False

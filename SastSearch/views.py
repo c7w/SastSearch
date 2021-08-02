@@ -1,10 +1,11 @@
+from django.http.response import HttpResponse
 from SearchEngine.models.RegVerify import RegVerify, PassReset
+from SearchEngine.models.Search import SearchRecord, News
 from django.shortcuts import  redirect, render
 import django.contrib.auth.models as AuthModels
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login, logout as auth_logout
-from utils import MailVerify
-from utils import GeneralProperty
+from utils import DataManager, GeneralProperty, MailVerify
 
 # Create your views here.
 def index(req):
@@ -116,7 +117,6 @@ def reset_password(req):
             props['email_input'] = True
             return render(req, "search/reset_password.html", props)
         
-
 def reset_password_verify(req, code):
     props = GeneralProperty.getProps(req, "Reset")
     if req.method == "GET":
@@ -144,5 +144,12 @@ def reset_password_verify(req, code):
             user = AuthModels.User.objects.get(username=email)
             user.set_password(password)
             user.save()
+            PassReset.objects.get(code=code).delete()
             return redirect("/")
-        
+
+def process_data(req):
+    return DataManager.ProcessData()
+
+def search(req):
+    props = GeneralProperty.getProps(req, "Result")
+    return render(req, "search/result.html", props)

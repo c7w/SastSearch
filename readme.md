@@ -27,6 +27,10 @@ Please note that only the latest verification email under a certain address is v
 
 Avatar: using Gravatar to provide for user's avatar.
 
+**Password Reset**
+A password-resetting link will be sent to the user's mailbox after submitting the form.
+
+The link will be expired in 10 minutes, and only the latest email under the same address will be valid.
 
 *By c7w*
 

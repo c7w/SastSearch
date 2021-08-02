@@ -82,6 +82,7 @@ DATABASES = {
         'PASSWORD': '123456abc',
         'HOST': '121.5.165.232',
         'PORT': '13306',
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
@@ -108,9 +109,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-US'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
