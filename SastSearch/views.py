@@ -1,7 +1,8 @@
+from SearchEngine.models.RegVerify import RegVerify, PassReset
 from django.shortcuts import  redirect, render
 import django.contrib.auth.models as AuthModels
 from django.contrib.auth import authenticate
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import login as auth_login, logout as auth_logout
 from utils import MailVerify
 from utils import GeneralProperty
 
@@ -76,22 +77,72 @@ def login(req):
             if user:
                 if (user.has_perm('auth.EmailVerified')):
                     # Login success.
-                    print(user)
                     auth_login(req, user)
                     return redirect("/")
                 else:
                     # Email address was not verified.
                     props['message'] =  "Email address has not been verified."
-                    return render(req, "search/login.html")
+                    return render(req, "search/login.html", props)
             else:
                 # Login failed. Password did not match.
                 props["message"] = "Login failed. Invalid password."
-                return render(req, "search/login.html")
+                return render(req, "search/login.html", props)
 
         except:
             # No matching Record. Return.
             props["message"] = "Email address has not been registered."
-            return render(req, "search/login.html")
+            return render(req, "search/login.html", props)
 
 def logout(req):
-    pass
+    auth_logout(req)
+    return redirect("/")
+
+def reset_password(req):
+    props = GeneralProperty.getProps(req, "Reset")
+    if req.method == 'GET':
+        props['email_input'] = True
+        return render(req, "search/reset_password.html", props)
+    if req.method == 'POST':
+        email = req.POST.get("email")
+        password = req.POST.get("password")
+        try:
+            user = AuthModels.User.objects.get(username=email)
+            MailVerify.sendResetMail(email)
+            props['message'] = "An email has been sent for resetting your password."
+            return render(req, "search/reset_password.html", props)
+        except:
+            # No Matching Records for this email.
+            props['message'] = "No matching email was found."
+            props['email_input'] = True
+            return render(req, "search/reset_password.html", props)
+        
+
+def reset_password_verify(req, code):
+    props = GeneralProperty.getProps(req, "Reset")
+    if req.method == "GET":
+        try:
+            email = PassReset.objects.get(code=code).email
+            props['message'] = "Resetting password for:<br/>"+email
+            props['password_reset'] = True
+            return render(req, "search/reset_password.html", props)
+        except:
+            # No matching Records
+            props['message'] = "The link was invalid or expired."
+            return render(req, "search/reset_password.html", props)
+    if req.method == "POST":
+        # Retrive data
+        email = PassReset.objects.get(code=code).email
+        password = req.POST['password']
+        password_repeat = req.POST['password_repeat']
+        
+        if password != password_repeat:
+            props['message'] = "The repeated password didn't match."
+            props['password_reset'] = True
+            return render(req, "search/reset_password.html", props)
+        else:
+            # Reset password for user
+            user = AuthModels.User.objects.get(username=email)
+            user.set_password(password)
+            user.save()
+            return redirect("/")
+        

@@ -25,4 +25,6 @@ urlpatterns = [
     path('signup/<code>/', views.signup_verify),
     path('login/', views.login),
     path('logout/', views.logout),
+    path('reset_password/', views.reset_password),
+    path('reset_password/<code>/', views.reset_password_verify),
 ]

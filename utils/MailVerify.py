@@ -6,6 +6,8 @@ from SearchEngine.models import RegVerify
 from django.core.mail import send_mail
 import SearchEngine
 
+BASE_URL = 'http://localhost:8000'
+
 def sendMail(email):
     code = ''.join(random.sample(
             string.ascii_letters + string.digits, 20))
@@ -18,14 +20,37 @@ def sendMail(email):
     Please verify your email address by clicking the link below.
     The link would be expired in 10 minutes.
     
-    http://localhost:8000/signup/{code}/
+    {BASE}/signup/{code}/
     
 Best wishes,
 c7w
 
-    '''.replace('{code}', code)
+    '''.replace('{code}', code).replace('{BASE}', BASE_URL)
     
     send_mail("Welcome to SASTSearchEngine Site! | No Reply", message, 'SAST_SearchEngine@cc7w.cf', [email])
+    
+def sendResetMail(email):
+    code = ''.join(random.sample(
+            string.ascii_letters + string.digits, 20))
+    verifyEntry = RegVerify.PassReset(email=email, code=code)
+    verifyEntry.save()
+
+    message = '''Hi There,
+    
+    The email was sent for resetting your password on SAST Search Site.
+    Please ignore this email if you had not requested a password reset.
+    
+    Please click the link below to reset your password.
+    The link will be expired in 10 minutes.
+    
+    {BASE}/reset_password/{code}/
+    
+Best wishes,
+c7w
+
+    '''.replace('{code}', code).replace('{BASE}', BASE_URL)
+    
+    send_mail("Password Reset | No Reply", message, 'SAST_SearchEngine@cc7w.cf', [email])
 
 def verifyCode(code):
     try:
