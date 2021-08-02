@@ -1,4 +1,5 @@
-from django.http.response import HttpResponse
+from datetime import datetime
+from django.http.response import Http404, HttpResponse, HttpResponseNotFound
 from SearchEngine.models.RegVerify import RegVerify, PassReset
 from SearchEngine.models.Search import SearchRecord, News
 from django.shortcuts import  redirect, render
@@ -12,9 +13,27 @@ def index(req):
     return render(req, "search/index.html", GeneralProperty.getProps(req, "Index"))
 
 def news(req):
-    raise NotImplementedError
-    # return render(req, "search/detail.html", GeneralProperty.getProps(req, "News"))
-
+    props = GeneralProperty.getProps(req, "News")
+    id = str(req.GET.get("id", "0"))
+    highlight = req.GET.get("highlight", "")
+    try:
+        news = News.objects.get(id=id)
+        props['title'] = news.title + " | SAST Search"
+        props['article'] = {}
+        props['article']['title'] = news.title
+        props['article']['source'] = news.source
+        # props['article']['time'] = news.time.strftime("%Y-%m-%d %H:%M:%S")
+        props['article']['time'] = news.time
+        props['article']['content'] = news.content.replace("\xa0", " ").replace("\t", " ").replace("\r", "\n").replace(" ", "&nbsp;").split("\n")
+        if highlight != "":
+            props['article']['title'] = news.title.replace(
+                highlight, "<span style='background-color: yellow'>" + highlight + "</span>")
+            props['article']['content'] = map(lambda section: section.replace(
+                highlight, "<span style='background-color: yellow'>" + highlight + "</span>"), props['article']['content'])
+        return render(req, "search/detail.html", props)
+    except:
+        return HttpResponseNotFound()
+        
 def signup(req):    
     props = GeneralProperty.getProps(req, "SignUp")
     if req.method == "GET":
