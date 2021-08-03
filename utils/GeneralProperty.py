@@ -8,6 +8,7 @@ def getProps(req, title):
     
     if req.user.username:
         result['login']['success'] = '1'
+        result['login']['email'] = req.user.username
         md5 = hashlib.md5()
         md5.update(req.user.username.encode(encoding='utf-8'))
         result['login']['avatar'] = 'https://www.gravatar.com/avatar/' + \
