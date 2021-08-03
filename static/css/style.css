@@ -1,15 +1,22 @@
+:root {
+  --bg-image: url(https://i.loli.net/2021/08/03/17CeYrRoJ89NiWU.jpg);
+}
+
+
 body::before {
     content: "";
     top: 0;
-    left: 0;
-    right: 0;
+    left: 0%;
+    right: 0%;
     bottom: 0;
     opacity: .15;
     position: fixed;
     pointer-events: none;
     background-repeat: no-repeat;
-    background-image: url(https://z3.ax1x.com/2021/08/01/Wxs2V0.jpg);
-    background-size: 100% 100%;
+    background-image: var(--bg-image);
+    background-size: contain;
+    background-position: center;
+
 }
 
 .login-card {
@@ -432,6 +439,12 @@ p.post-short-info {
     color: #fff
 }
 
+.navigation-clean-button .actions .themes {
+    margin-right: 1rem;
+    text-decoration: none;
+    color: #465765
+}
+
 .navigation-clean-button .navbar-text .action-button,
 .navigation-clean-button .navbar-text .action-button:active,
 .navigation-clean-button .navbar-text .action-button:hover {
@@ -609,11 +622,11 @@ div {
 }
 
 .post-container {
-    float: left;
-    width: 100%;
-    height: 150px;
+    /* float: left; */
+    width: 60%;
+    height: 100px;
     position: relative;
-    margin: 20px 0 20px;
+    margin: 20px auto 20px;
     border-radius: 10px;
     background-color: white;
     box-shadow: 0 1px 20px -6px rgba(0, 0, 0, .5);

@@ -14,7 +14,7 @@
 
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
     </head>
-    <body>
+    <body style="--bg-image:url(&quot;&quot;);">
     <!-- <nav class="navbar navbar-light navbar-expand-md navigation-clean-button" style="position: fixed; width: 100%; background-color: grey;"> -->
     <nav class="navbar navbar-light navbar-expand-md navigation-clean-button" style="width: 100%;">
         <div class="container-fluid">
@@ -26,6 +26,7 @@
             
         <span class="navbar-text actions">
             <!-- TODO: 如果用户已经登录，则展示log out和头像，否则展示log in和sign up-->
+            <span class="themes">Themes</span>
             {%if login.success == '1'%}
             <a class="login" href="/logout">Log Out</a>
             <a href="#"><img class="user-avatar" src="{{login.avatar}}"></a>

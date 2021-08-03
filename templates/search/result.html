@@ -4,7 +4,7 @@
 <main>
     <div class="container">
         <!-- TODO: -->
-        <p>Find {{search.resultCount}} results in {{search.timeCost}} s, currently at page {{search.currPage}} / {{search.totalPage}}.<br></p>
+        <p style="text-align: center;">Find {{search.resultCount}} results in {{search.timeCost}} s, currently at page {{search.currPage}} / {{search.totalPage}}. {{search.fuzzy|safe}}<br></p>
 
         <!-- TODO: 展示每个搜索结果-->
         {%for entry in search.currEntry%}

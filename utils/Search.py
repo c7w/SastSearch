@@ -35,7 +35,6 @@ def SearchNews(req, query, fuzzy, page, props):
         searchList = jieba.cut_for_search(query)
         result = []
         for keyword in searchList:
-            print(keyword)
             result = merge(result, SingleSearch(keyword))
     else:
         result = SingleSearch(query)
@@ -51,11 +50,16 @@ def SearchNews(req, query, fuzzy, page, props):
         'currEntry': []
     }
     for entry in result[(page-1)*10: page*10]:
-        article_title = News.objects.get(id=entry['article'])
+        article = News.objects.get(id=entry['article'])
         title = ("<a href='%s'>%s</a>" % ("/news?id="+str(entry['article'])+"&highlight="+query,
-                                            article_title.title.replace(query, "<span style='background-color: yellow'>%s</span>" % query)))
+                                            article.title.replace(query, "<span style='background-color: yellow'>%s</span>" % query)))
         # TODO
-        excerpt = "Abstract Placeholder"
+        excerpt = article.content[0:50]
+        excerpt = excerpt.replace(
+            query, "<span style='background-color: yellow'>%s</span>" % query)
+        if len(article.content) > 50:
+            excerpt += "..."
+            
 
         currObject = {
             "title": title,
@@ -63,6 +67,11 @@ def SearchNews(req, query, fuzzy, page, props):
         }
         props['search']['currEntry'].append(currObject)
 
+    if fuzzy != "disabled":
+        props['search']['fuzzy'] = "(Fuzzy)"
+    else:
+        props['search']['fuzzy'] = "<a href='%s'>Enable fuzzy search.</a>" % ("/search?q=%s&fuzzy=%s&page=%s" % (query, "enabled", page))
+    
     END_SEARCH = time.time()
     props['search']['timeCost'] = round(END_SEARCH - START_SEARCH, 6)
     return render(req, "search/result.html", props)

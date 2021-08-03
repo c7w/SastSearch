@@ -6,18 +6,23 @@ from django.shortcuts import  redirect, render
 import django.contrib.auth.models as AuthModels
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login, logout as auth_logout
-from utils import DataManager, GeneralProperty, MailVerify, Search
+from utils import DataManager, GeneralProperty, MailVerify, Search, Log
 from django.db.models import Q
 from django.utils import timezone
 
 # Create your views here.
 def index(req):
-    return render(req, "search/index.html", GeneralProperty.getProps(req, "Index"))
+    props = GeneralProperty.getProps(req, "Index")
+    Log.log(props, "/Index")
+    return render(req, "search/index.html", props)
 
 def news(req):
     props = GeneralProperty.getProps(req, "News")
     id = str(req.GET.get("id", "0"))
     highlight = req.GET.get("highlight", "")
+    
+    Log.log(props, "/News Id(%s) Highlight(%s)" % (id, highlight))
+    
     try:
         news = News.objects.get(id=id)
         props['title'] = news.title + " | SAST Search"
@@ -38,6 +43,7 @@ def news(req):
         
 def signup(req):    
     props = GeneralProperty.getProps(req, "SignUp")
+    Log.log(props, "/Signup")
     if req.method == "GET":
         return render(req, "search/signup.html", props)
     if req.method == "POST":
@@ -75,6 +81,7 @@ def signup(req):
 
 def signup_verify(req, code):
     props = GeneralProperty.getProps(req, "Email Verification")
+    Log.log(props, "/Signup_Verify Code(%s)" % (code))
     if MailVerify.verifyCode(code):
         props['message'] = "Your email address has been verified!"
         return render(req, "search/signup_feedback.html", props)
@@ -85,6 +92,7 @@ def signup_verify(req, code):
 
 def login(req):
     props = GeneralProperty.getProps(req, "Login")
+    Log.log(props, "/Login")
     if req.method == "GET":
         return render(req, "search/login.html", props)
     if req.method == "POST":
@@ -116,11 +124,13 @@ def login(req):
             return render(req, "search/login.html", props)
 
 def logout(req):
+    Log.log(GeneralProperty.getProps(req, "Logout"), "/Logout")
     auth_logout(req)
     return redirect("/")
 
 def reset_password(req):
     props = GeneralProperty.getProps(req, "Reset")
+    Log.log(props, "/Reset_Password")
     if req.method == 'GET':
         props['email_input'] = True
         return render(req, "search/reset_password.html", props)
@@ -140,6 +150,7 @@ def reset_password(req):
         
 def reset_password_verify(req, code):
     props = GeneralProperty.getProps(req, "Reset")
+    Log.log(props, "/Reset_Password_Verify Code(%s)" % (code))
     if req.method == "GET":
         try:
             email = PassReset.objects.get(code=code).email
@@ -173,11 +184,14 @@ def process_data(req):
 
 def search(req):
     props = GeneralProperty.getProps(req, "Result")
+    
     if props['login']['success'] == '0':
         return redirect("/login")
     query = req.GET.get("q")
     fuzzy = req.GET.get("fuzzy", "disabled")
     page = int(req.GET.get("page", "1"))
+    
+    Log.log(props, "/Search Q(%s) Fuzzy(%s) Page(%s)" % (query, fuzzy, page))
     
     new_record = SearchRecord(email=props['login']['email'], record=query, fuzzy=(fuzzy!="disabled"),\
                               time=timezone.make_aware(datetime.datetime.now(), timezone.get_current_timezone()))
