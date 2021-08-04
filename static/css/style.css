@@ -430,6 +430,38 @@ p.post-short-info {
     text-decoration: none;
     color: #465765
 }
+/* .navbar {
+    height: 3rem;
+    align-content: flex-start;
+} */
+.navigation-clean-button .themes {
+    margin-left: 1.2rem;
+    margin-right: 1.2rem;
+    margin-bottom: 0.3rem;
+    text-decoration: none;
+    color: #465765;
+    text-align: center;
+    overflow: hidden;
+    float: right;
+    flex: 1;
+}
+
+.container-fluid{
+    height: 5rem;
+}
+
+.navigation-clean-button .themes .option {
+  display: none;
+}
+.navigation-clean-button .themes:hover {
+    /* margin-top: 1.2rem; */
+}
+
+.navigation-clean-button .themes:hover .option {
+    display: inline;
+}
+
+
 
 .navigation-clean-button.navbar-dark .actions .login {
     color: #dfe8ee

@@ -4,22 +4,22 @@ searchBox.forEach(function (elm) {
         elm.previousElementSibling.value = ""
     })
 });
-(function () {
-    var rowNode = $("div.post-content p");
-    var keyword = document.getElementById("input").value.split(" ");
-    rowNode.each(function () {
-        var newHtml = $(this).html();
-        for (var i in keyword) {
-            newHtml = newHtml.replace(keyword[i], '<span style="color:lightpink;">' + keyword[i] + "</span>")
-        }
-        $(this).html(newHtml)
-    })
-}());
+// (function () {
+//     var rowNode = $("div.post-content p");
+//     var keyword = document.getElementById("input").value.split(" ");
+//     rowNode.each(function () {
+//         var newHtml = $(this).html();
+//         for (var i in keyword) {
+//             newHtml = newHtml.replace(keyword[i], '<span style="color:lightpink;">' + keyword[i] + "</span>")
+//         }
+//         $(this).html(newHtml)
+//     })
+// }());
 
 function set_background_image(option = 'NotSet') {
     // Read from cookies
     if (option == 'NotSet') {
-        option = 'Yuro'
+        option = ''
         for (let entry of document.cookie.split(';').map(x => x.trim()) ){
             const dict = entry.split('=');
             if (dict[0] == 'bgimg') {
@@ -31,7 +31,7 @@ function set_background_image(option = 'NotSet') {
     
     // Const options
     const options = {
-        'Yuro': {
+        'Yoru': {
             'url': "https://i.loli.net/2021/08/03/17CeYrRoJ89NiWU.jpg",
             'color': 'rgb(5,7,22);'
         },
