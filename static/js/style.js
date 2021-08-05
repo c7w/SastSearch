@@ -19,7 +19,7 @@ searchBox.forEach(function (elm) {
 function set_background_image(option = 'NotSet') {
     // Read from cookies
     if (option == 'NotSet') {
-        option = ''
+        option = 'Mori'
         for (let entry of document.cookie.split(';').map(x => x.trim()) ){
             const dict = entry.split('=');
             if (dict[0] == 'bgimg') {

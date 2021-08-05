@@ -6,7 +6,7 @@ from SearchEngine.models import RegVerify
 from django.core.mail import send_mail
 import SearchEngine
 
-BASE_URL = 'http://localhost:8000'
+BASE_URL = 'http://121.5.165.232:10086'
 
 def sendMail(email):
     code = ''.join(random.sample(
