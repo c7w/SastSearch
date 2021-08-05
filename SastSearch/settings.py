@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '6$*l*u7+m^0ak^qty6se#!)(%%6hhrxy7@*1b@v-ekaqvu5z%&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*',]
 
@@ -125,7 +125,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -134,7 +134,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-STATICFILES_DIRS = (os.path.join('static'), )
 
 EMAIL_HOST = 'smtp.ym.163.com'
 EMAIL_HOST_USER = 'SAST_SearchEngine@cc7w.cf'
